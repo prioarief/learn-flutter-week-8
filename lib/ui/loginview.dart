@@ -25,49 +25,53 @@ class _LoginViewState extends State<LoginView> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildTextField(
-                labelText: "Email",
-                keyboardType: TextInputType.text,
-                controller: _emailTextbboxControoller,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Email harus diisi';
-                  }
+          child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildTextField(
+                    labelText: "Email",
+                    isSecure: false,
+                    keyboardType: TextInputType.text,
+                    controller: _emailTextbboxControoller,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email harus diisi';
+                      }
 
-                  RegExp emailRegex =
-                      RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+                      RegExp emailRegex = RegExp(
+                          r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
 
-                  if (!emailRegex.hasMatch(value)) {
-                    return 'Email tidak valid';
-                  }
-                  return null;
-                },
-              ),
-              _buildTextField(
-                labelText: "Password",
-                keyboardType: TextInputType.text,
-                controller: _passwordTextbboxControoller,
-                validator: (value) {
-                  if (value!.length < 6) {
-                    return 'Password harus diisi dan minimal 6 karakter';
-                  }
-                  return null;
-                },
-              ),
-              
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: _buildLoginButton(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: _buildRegistrasiLink(), // Add the link to RegistrasiView
-              ),
-            ],
-          ),
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Email tidak valid';
+                      }
+                      return null;
+                    },
+                  ),
+                  _buildTextField(
+                    labelText: "Password",
+                    isSecure: true,
+                    keyboardType: TextInputType.text,
+                    controller: _passwordTextbboxControoller,
+                    validator: (value) {
+                      if (value!.length < 6) {
+                        return 'Password harus diisi dan minimal 6 karakter';
+                      }
+                      return null;
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: _buildLoginButton(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child:
+                        _buildRegistrasiLink(), // Add the link to RegistrasiView
+                  ),
+                ],
+              )),
         ),
       ),
     );
@@ -78,12 +82,14 @@ class _LoginViewState extends State<LoginView> {
     required TextInputType keyboardType,
     TextEditingController? controller,
     FormFieldValidator<String>? validator,
+    required bool isSecure,
   }) {
     return TextFormField(
       decoration: InputDecoration(labelText: labelText),
       keyboardType: keyboardType,
       controller: controller,
       validator: validator,
+      obscureText: isSecure,
     );
   }
 
